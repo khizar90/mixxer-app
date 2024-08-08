@@ -1,0 +1,258 @@
+
+@media (min-width: 1700px) {
+  .feature-text{
+      left: 244px;
+      width: 440px;
+      top: 299px;
+  }
+  .nearby-text{
+      left: 235px;
+      bottom: 153px;
+      width: 434px;
+  }
+  .friend-text{
+      right: 63px;
+      top: 454px;
+      width: 498px;
+  }
+  .home-bg .text-white{
+    padding-top: 255px
+  }
+  .home-bg h1{
+    font-size: 50px;
+  }
+  .home-bg p{
+    font-size: 25px;
+  }
+}
+@media (min-width: 1900px) {
+  .feature-text{
+      left: 319px;
+      top: 300px;
+  }
+  .nearby-text{
+      left: 308px;
+      bottom: 174px;
+  }
+  .friend-text{
+      right: 130px;
+      top: 510px;
+  }
+}
+@media (min-width: 2200px) {
+  .feature-text{
+      left: 400px;
+      top: 350px;
+  }
+  .nearby-text{
+      left: 392px;
+      bottom: 202px;
+  }
+  .friend-text{
+      right: 226px;
+      top: 565px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .feature-text p,
+.nearby-text p,
+.friend-text p {
+  font-size: 25px;
+}
+.feature-text h5,
+.nearby-text h5,
+.friend-text h5 {
+  font-size: 35px;
+}
+.feature-text{
+  left: 531px;
+  width: 580px;
+  top: 258px;
+}
+.nearby-text{
+  left: 529px;
+  bottom: 165px;
+  width: 600px;
+}
+.friend-text{
+  right: 350px;
+  top: 420px;
+  width: 600px;
+}
+}
+
+@media (max-width: 1024px) {
+    .friend-text {
+        width: 361px;
+        top: 315px;
+        right: 0;
+      }
+      .nearby-text {
+        left: 45px;
+        bottom: 96px;
+        width: 430px;
+      }
+      .feature-text {
+        top: 205px;
+        width: 390px;
+        left: 50px;
+      }
+}
+@media (max-width: 830px) {
+    .nearby-text {
+        bottom: 100px;
+        width: 286px;
+        left: 17px;
+      }
+      .feature-text {
+        top: 156px;
+        width: 293px;
+        left: 18px;
+      }
+      .friend-text {
+        width: 241px;
+        top: 242px;
+      }
+}
+@media (max-width: 768px) {
+    .feature-text {
+        width: 260px;
+        top: 86px;
+      }
+      .nearby-text {
+        bottom: 95px;
+        width: 250px;
+      }
+      .friend-text {
+        width: 224px;
+        top: 189px;
+      }
+}
+@media (max-width: 640px) {
+    .feature-text p,
+    .nearby-text p,
+    .friend-text p {
+      font-size: 14px;
+    }
+    .feature-text h5,
+    .nearby-text h5,
+    .friend-text h5 {
+      font-size: 17px;
+    }
+    .nearby-text {
+      width: 220px;
+      bottom: 88px;
+    }
+    .feature-text {
+      width: 225px;
+      top: 101px;
+    }
+    .friend-text {
+      width: 174px;
+      top: 179px;
+    }
+}
+@media (max-width: 550px) {
+    .feature-text p,
+    .nearby-text p,
+    .friend-text p {
+      font-size: 12px;
+    }
+    .feature-text h5,
+    .nearby-text h5,
+    .friend-text h5 {
+      font-size: 13px;
+    }
+    .explore-bg img {
+      width: 100%;
+    }
+    .nearby-text {
+      width: 190px;
+      bottom: 87px;
+      left: 6px;
+    }
+    .feature-text {
+      left: 7px;
+      width: 185px;
+      top: 117px;
+    }
+    .friend-text {
+      width: 152px;
+      top: 202px;
+    }
+}
+@media (max-width: 425px) {
+  .explore-bg h1{
+    font-size: 19px;
+  }
+  .feature-text p,
+  .nearby-text p,
+  .friend-text p {
+    font-size: 9px;
+  }
+  .feature-text h5,
+  .nearby-text h5,
+  .friend-text h5 {
+    font-size: 10px;
+  }
+  .nearby-text {
+    width: 149px;
+    bottom: 64px;
+}
+  .feature-text {
+    width: 163px;
+    top: 90px;
+  }
+  .friend-text {
+    width: 124px;
+    top: 118px;
+  }
+}
+@media (max-width: 375px) {
+    .feature-text p,
+    .nearby-text p,
+    .friend-text p {
+      font-size: 8px;
+    }
+    .feature-text h5,
+    .nearby-text h5,
+    .friend-text h5 {
+      font-size: 9px;
+    }
+    .feature-text{
+      width: 132px;
+      top: 90px;
+    }
+    .nearby-text{
+      width: 125px;
+      bottom: 52px;
+    }
+    .friend-text{
+      width: 108px;
+    }
+}
+@media (max-width: 320px) {
+    .feature-text p,
+  .nearby-text p,
+  .friend-text p {
+    font-size: 6px;
+  }
+  .feature-text h5,
+  .nearby-text h5,
+  .friend-text h5 {
+    font-size: 8px;
+  }
+  .nearby-text {
+    width: 116px;
+    bottom: 42px;
+  }
+  .feature-text {
+    width: 116px;
+    top: 113px;
+  }
+  .friend-text {
+    width: 95px;
+    top: 146px;
+  }
+}

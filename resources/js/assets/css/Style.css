@@ -1,0 +1,439 @@
+@font-face {
+  font-family: SFProdisplay-regular;
+  src: url(/app/Font/SFPRODISPLAYREGULAR.OTF);
+}
+@font-face {
+  font-family: SFProdisplay-medium;
+  src: url(/app/Font/SFPRODISPLAYMEDIUM.OTF);
+}
+@font-face {
+  font-family: SFProdisplay-bold;
+  src: url(/app/Font/SFPRODISPLAYMEDIUM.OTF);
+}
+@font-face {
+  font-family: Madetommy-bold;
+  src: url(/app/Font/made_tommy_soft/MADE\ Tommy\ Soft\ Bold\ PERSONAL\ USE.otf);
+}
+@font-face {
+  font-family: Madetommy-medium;
+  src: url(/app/Font/made_tommy_soft/MADE\ Tommy\ Soft\ Medium\ PERSONAL\ USE.otf);
+}
+@font-face {
+  font-family: Madetommy-regular;
+  src: url(/app/Font/made_tommy_soft/MADE\ Tommy\ Soft\ Regular\ PERSONAL\ USE.otf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body::-webkit-scrollbar{
+    display: block;
+    width: 10px;
+    background-color: transparent;
+}
+body::-webkit-scrollbar-thumb{
+    background-color: #A8A8A8;
+    border-radius: 50px;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============== NavBar Design ================== */
+
+.nav-bar {
+  transition: all 0.3s;
+}
+.nav-bar p {
+  font-family: "SFProdisplay-medium";
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+.nav-bar p:hover {
+  color: #5a5547;
+}
+.nav-bar img[alt="LOGO"] {
+  width: 200px;
+}
+.fixed-top img[alt="LOGO"] {
+  width: 200px;
+}
+.side-hr {
+  margin: 0;
+  color: #bab8b8;
+  opacity: 1;
+}
+.bg-brown {
+  background-color: #7e6c54;
+}
+
+/* ============= Home Design ================== */
+
+.home-bg img[alt="HOME"] {
+  clip-path: polygon(100% 0, 100% 83%, 35% 100%, 0% 100%, 0 51%, 0% 0%);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.home-bg .text-white {
+  padding-top: 150px;
+  padding-bottom: 70px;
+}
+.home-bg h1 {
+  font-family: "SFProdisplay-bold";
+  letter-spacing: 2px;
+}
+.home-bg p {
+  font-family: "SFProdisplay-regular";
+  letter-spacing: 2px;
+}
+.home-bg button {
+  outline: none;
+  border: 1px solid #ffffff;
+  border-radius: 25px;
+  background-color: #736c54;
+  font-family: "SFProdisplay-bold";
+  color: #ffffff;
+  width: 175px;
+  transition: all 0.3s ease;
+}
+.home-bg button:hover{
+    background-color: #a29c7c;
+}
+.home-bg img {
+  width: 180px;
+}
+
+/* ================= About Design ===================== */
+.about-bg {
+  background-image: url(../Images/ab-bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: 220px;
+  margin-top: 65px;
+}
+.about-bg h3 {
+  font-family: "Madetommy-medium";
+}
+.about-bg p {
+  font-family: "Madetommy-regular";
+  color: #655f5f;
+  padding-right: 130px;
+}
+.about-bg img[alt="ABIMG2"] {
+  width: 480px;
+}
+.about-bg img[alt="ABIMG3"],
+.about-bg img[alt="ABIMG4"] {
+  width: 300px;
+}
+
+/* ================ Essential Design ================ */
+.essen img {
+  width: 70%;
+}
+.essen h2 {
+  font-family: "SFProdisplay-bold";
+  color: #473d2f;
+}
+.essen p {
+  font-family: "Madetommy-medium";
+  color: #342d23;
+}
+.essen small {
+  font-family: "Madetommy-regular";
+  color: #342d23;
+}
+
+/* ================ Explore Design ================= */
+.explore-bg {
+  background-image: url(../Images/export-bg.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.explore-bg img {
+  width: 50%;
+  padding-top: 100px;
+  display: block;
+  margin: auto;
+}
+.explore-bg h1 {
+  font-family: "Madetommy-bold";
+  color: #ffffff;
+  text-align: center;
+}
+.explore-bg p {
+  font-family: "Madetommy-regular";
+  color: #ffffff;
+}
+.feature-text {
+  left: 198px;
+  width: 380px;
+  top: 244px;
+}
+.feature-text h5,
+.nearby-text h5,
+.friend-text h5 {
+  font-family: "Madetommy-regular";
+}
+.feature-text h5 span,
+.nearby-text h5 span,
+.friend-text h5 span {
+  border-bottom: 3px solid #f0ad4e;
+  font-family: "Madetommy-medium";
+}
+.nearby-text {
+  left: 195px;
+  bottom: 123px;
+  width: 360px;
+}
+.friend-text {
+  right: 60px;
+  top: 361px;
+  width: 415px;
+}
+.nearby-text h2 {
+  font-family: "Madetommy-medium";
+}
+.nearby-text p {
+  font-family: "Madetommy-regular";
+}
+
+/* ================= Discover Design ================= */
+.disc-text img[alt="discover"] {
+  filter: drop-shadow(0 0 6px #abb2c6);
+}
+.disc-text h5 {
+  color: #655f5f;
+  padding: 0 295px;
+}
+.disc-text h1,
+.disc-text h2 {
+  font-family: "Madetommy-medium";
+  color: #221f1f;
+}
+.disc-text p {
+  font-family: "SFProdisplay-medium";
+  color: #655f5f;
+}
+.disc-text small {
+  font-family: "Madetommy-regular";
+  color: #655f5f;
+}
+
+/* =================== Started Design ======================= */
+.start-bg {
+  background-color: #eeeae5;
+}
+.start-bg img {
+  width: 180px;
+}
+.start-bg h3 {
+  font-family: "Madetommy-medium";
+  color: #221f1f;
+}
+.start-bg h5 {
+  font-family: "Madetommy-medium";
+  color: #988265;
+}
+.start-bg h5 span {
+  font-family: "Madetommy-regular";
+  color: #221f1f;
+}
+.start-bg p {
+  font-family: "Madetommy-regular";
+  color: #988265;
+}
+.marg-img {
+  margin-top: 110px;
+}
+
+/* ================== FAQ'S Design =================== */
+
+.feed-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.accordian h1 {
+  font-family: "Madetommy-medium";
+  color: #000000;
+}
+.accordian span {
+  background-color: #eeeae5;
+  border-radius: 4px;
+  font-family: "Madetommy-regular";
+  color: #000000;
+  padding: 5px 10px;
+  margin-right: 15px;
+}
+.accordion-button::after {
+  background-image: url(../Images/icons/down.png);
+}
+.accordion-button:not(.collapsed)::after {
+  background-image: url(../Images/icons/Up.png);
+  transform: none !important;
+}
+.accordion-item {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+.accordion-item .accordion-header .accordion-button {
+  border-top: 1px solid #dee2e6;
+}
+.accordion-button {
+  border-radius: 8px;
+}
+.accordion-header {
+  font-family: "Madetommy-regular";
+  color: #000000;
+}
+.accordion-button:not(.collapsed) {
+  color: #736c54;
+}
+.accordion-body {
+  font-family: "SFProdisplay-regular";
+  color: #000000;
+}
+.accordion-button:not(.collapsed) {
+  background-color: transparent;
+  box-shadow: none;
+}
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+/* =================== Contact Design ================= */
+.contact-bg {
+  background-image: url(../Images/contact-bg.png);
+  background-size: 100% 100%;
+}
+.contact-bg .contact-info {
+  padding-right: 40px;
+}
+.contact-bg .row {
+  padding: 150px 0 60px;
+}
+.contact-bg h1,
+.contact-bg label {
+  font-family: "Madetommy-medium";
+  color: #000000;
+}
+.contact-bg p {
+  font-family: "Madetommy-regular";
+  color: #655f5f;
+}
+.contact-bg input,
+.contact-bg textarea {
+  outline: none;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: "Madetommy-regular";
+  color: #000000;
+  background-color: #fafafa;
+}
+.contact-bg textarea {
+  min-height: 110px;
+}
+.contact-bg button {
+  outline: none;
+  border: none;
+  border-radius: 20px;
+  background-color: #736c54;
+  color: #ffffff;
+  padding: 8px;
+  transition: all 0.3s ease;
+}
+.contact-bg button:hover{
+    background-color: #a29c7c;
+}
+.auth-input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* ================= Footer Design =============== */
+.footer-bg {
+  background-image: url(../Images/footer-bg.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.footer-bg p {
+  font-family: "Madetommy-regular";
+  color: #472d3f;
+}
+.footer-bg .text-decoration-none {
+  color: #0b0a0a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.footer-bg .text-decoration-none:hover {
+  color: #736c54;
+}
+.icons p {
+  font-family: "Madetommy-regular";
+  color: #0b0a0a;
+}
+.icons small {
+  font-family: "Madetommy-regular";
+  color: #7a7474;
+}
+.icons .social-icon {
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.icons .social-icon:hover {
+  color: #736c54;
+}
+
+/* ================ Terms Design ================= */
+.terms li {
+  font-family: "Madetommy-regular";
+  color: #000000;
+  cursor: pointer;
+}
+.terms .active {
+  font-family: "Madetommy-medium";
+}
+.terms h1 {
+  font-family: "Madetommy-medium";
+}
+.terms small {
+  font-family: "Madetommy-regular";
+  color: #434949;
+}
+.hr-2 {
+  width: 24px;
+  border: 1.5px solid #7e6c54;
+  rotate: 90deg;
+  position: relative;
+  top: 30px;
+  left: 195px;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+.term-text p {
+  font-family: "Madetommy-medium";
+  color: #4e4949;
+}
+.term-text small,
+.term-text li {
+  font-family: "Madetommy-regular";
+  color: #4e4949;
+}
+.term-text small span {
+  font-family: "Madetommy-medium";
+  color: #4e4949;
+}

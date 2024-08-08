@@ -1,0 +1,300 @@
+@media (max-width: 1200px) {
+  .about-bg img[alt="ABIMG3"],
+  .about-bg img[alt="ABIMG4"] {
+    width: 300px;
+  }
+}
+@media (max-width: 1024px) {
+  .about-bg img[alt="ABIMG2"] {
+    width: 415px;
+  }
+  .about-bg img[alt="ABIMG3"],
+  .about-bg img[alt="ABIMG4"] {
+    width: 215px;
+  }
+  .explore-bg img {
+    width: 55%;
+  }
+  .disc-text h5 {
+    padding: 0 160px;
+  }
+  .essen img {
+    width: 83%;
+  }
+}
+@media (max-width: 970px) {
+  .essen img {
+    width: 100%;
+  }
+  .essen h2 {
+    font-size: 24px;
+  }
+}
+@media (max-width: 830px) {
+  .about-bg {
+    background-position-y: 115px;
+  }
+  .about-bg p {
+    padding: 0;
+  }
+  .explore-bg img {
+    width: 70%;
+  }
+  .disc-text h5 {
+    padding: 0 70px;
+  }
+  .start-bg img {
+    width: 130px;
+  }
+  .essen img {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .home-bg img {
+    width: 130px;
+  }
+
+  .about-bg img[alt="ABIMG2"] {
+    width: 365px;
+  }
+  .about-bg img[alt="ABIMG3"],
+  .about-bg img[alt="ABIMG4"] {
+    width: 186px;
+  }
+  .explore-bg img {
+    width: 80%;
+  }
+  .explore-bg .position-relative {
+    padding-top: 6px !important;
+  }
+  .explore-bg h1 {
+    font-size: 26px;
+  }
+}
+@media (max-width: 767px) {
+  .home-bg img[alt="HOME"]{
+    height: auto;
+  }
+  .home-bg .text-white {
+    padding-top: 110px;
+    padding-bottom: 0;
+  }
+  .home-bg h1 {
+    letter-spacing: 0;
+  }
+  .home-bg p {
+    letter-spacing: 1px;
+  }
+  .start-bg h3 {
+    font-size: 20px;
+  }
+  .start-bg h5 {
+    font-size: 18px;
+  }
+  .start-bg img {
+    width: 90px;
+  }
+  .essen img {
+    width: 65%;
+  }
+  .marg-img {
+    margin-top: 35px;
+  }
+  .contact-bg {
+    background: none;
+  }
+  .contact {
+    background-image: none;
+  }
+  .about-bg {
+    background-image: none;
+  }
+  .contact h1,
+  .contact p {
+    text-align: center;
+  }
+  .feed-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .home-bg .text-white {
+    padding-top: 100px;
+  }
+  .home-bg h1 {
+    font-size: 26px;
+  }
+  .home-bg p {
+    font-size: 15px;
+    letter-spacing: 0px;
+  }
+  .home-bg button {
+    width: 140px;
+    font-size: 13px;
+  }
+  .home-bg img {
+    width: 100px;
+  }
+  .fixed-top img[alt="LOGO"] {
+    width: 115px;
+  }
+  .explore-bg img {
+    width: 90%;
+  }
+  .start-bg img {
+    width: 100px;
+  }
+}
+
+@media (max-width: 550px) {
+  .disc-text h5 {
+    padding: 0 20px;
+  }
+  .start-bg img {
+    width: 100px;
+  }
+  .start-bg h3,
+  .start-bg h5 {
+    font-size: 20px;
+  }
+  .contact-bg .contact-info {
+    padding-right: 10px;
+  }
+}
+@media (max-width: 425px) {
+  .nav-bar img[alt="LOGO"] {
+    width: 95px;
+  }
+  .home-bg .text-white {
+    padding-top: 79px;
+  }
+  .home-bg h1 {
+    font-size: 17px;
+  }
+  .home-bg p {
+    font-size: 12px;
+    letter-spacing: 0px;
+  }
+  .home-bg button {
+    width: 95px;
+    font-size: 8px;
+  }
+  .home-bg img {
+    width: 65px;
+  }
+  .about-bg{
+    margin-top: 20px;
+  }
+  .disc-text h5 {
+    font-size: 17px;
+  }
+  .start-bg img {
+    width: 75px;
+  }
+  .start-bg h3,
+  .start-bg h5 {
+    font-size: 15px;
+  }
+  .start-bg p {
+    font-size: 12px;
+  }
+  .marg-img {
+    margin-top: 30px;
+  }
+  .contact-bg .row {
+    padding: 0;
+  }
+  .explore-bg img {
+    padding-top: 50px;
+  }
+}
+@media (max-width: 375px) {
+  .home-bg .text-white {
+    padding-top: 50px;
+  }
+  .start-bg h3,
+  .start-bg h5 {
+    font-size: 13px;
+  }
+  .start-bg img {
+    width: 65px;
+  }
+  .marg-img {
+    margin-top: 13px;
+  }
+}
+@media (max-width: 320px) {
+  .nav-bar img[alt="LOGO"] {
+    width: 85px;
+  }
+  .home-bg h1 {
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+  .home-bg p {
+    font-size: 10px;
+  }
+  .home-bg button {
+    width: 80px;
+    font-size: 7px;
+  }
+  .home-bg img {
+    width: 50px;
+  }
+  .disc-text h5 {
+    padding: 0 0;
+  }
+  .start-bg img {
+    width: 55px;
+  }
+  .start-bg h3,
+  .start-bg h5 {
+    font-size: 10px;
+  }
+  .start-bg p {
+    font-size: 10px;
+  }
+  .explore-bg h1 {
+    font-size: 20px;
+  }
+  .essen img {
+    width: 85%;
+  }
+}
+
+@media (min-width: 2560px) {
+  .about-bg {
+    margin-top: 350px;
+  }
+  .explore-bg img {
+    width: 40%;
+  }
+}
+
+@media (max-width: 2560px) {
+ .about-bg {
+   margin-top: 350px;
+ }
+}
+@media (max-width: 1700px) {
+  .about-bg {
+    margin-top: 465px;
+  }
+}
+/* @media (max-width: 1440px) {
+  .about-bg {
+    margin-top: 65px ;
+  }
+} */
+@media (max-width: 768px) {
+  .about-bg {
+    margin-top: 100px;
+  }
+}
+@media (max-width: 425px) {
+  .about-bg {
+    margin-top: 30px;
+  }
+}

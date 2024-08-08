@@ -1,0 +1,5 @@
+@include('panel-v1.layouts.header')
+@include('panel-v1.layouts.sidebar')
+@include('panel-v1.layouts.topbar')
+@yield('content')
+@include('panel-v1.layouts.footer')
