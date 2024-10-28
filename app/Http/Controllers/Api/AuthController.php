@@ -17,6 +17,9 @@ use App\Mail\ForgotOtp;
 use App\Mail\OtpSend;
 use App\Models\Category;
 use App\Models\LinkedAccount;
+use App\Models\Message;
+use App\Models\Notification;
+use App\Models\NotificationAllow;
 use App\Models\OtpVerify;
 use App\Models\User;
 use App\Models\UserDevice;
@@ -84,12 +87,17 @@ class AuthController extends Controller
 
         $create->save();
 
+        $allowNotify = new  NotificationAllow();
+        $allowNotify->user_id = $create->uuid;
+        $allowNotify->is_allow = 1;
+        $allowNotify->save();
+
         $userdevice = new UserDevice();
         $userdevice->user_id = $create->uuid;
         $userdevice->device_name = $request->device_name ?? 'No name';
         $userdevice->device_id = $request->device_id ?? 'No ID';
         $userdevice->timezone = $request->timezone ?? 'No Time';
-        $userdevice->token = $request->fcm_token ?? 'No tocken';
+        $userdevice->token = $request->fcm_token ?? 'No token';
         $userdevice->save();
 
 
@@ -114,6 +122,7 @@ class AuthController extends Controller
         } else {
             $newuser->is_subscribe = false;
         }
+        $newuser->is_notify_allow = true;
         return response()->json([
             'status' => true,
             'action' => 'User register successfully',
@@ -135,7 +144,7 @@ class AuthController extends Controller
                 $userdevice->device_name = $request->device_name ?? 'No name';
                 $userdevice->device_id = $request->device_id ?? 'No ID';
                 $userdevice->timezone = $request->timezone ?? 'No Time';
-                $userdevice->token = $request->fcm_token ?? 'No tocken';
+                $userdevice->token = $request->fcm_token ?? 'No token';
                 $userdevice->save();
 
                 $interest = UserInterest::where('user_id', $user->uuid)->first();
@@ -156,6 +165,17 @@ class AuthController extends Controller
                     $user->is_subscribe = false;
                 }
 
+                $allowNotify = NotificationAllow::where('user_id', $user->uuid)->first();
+                if ($allowNotify) {
+                    if ($allowNotify->is_allow == 1) {
+                        $user->is_notify_allow = true;
+                    } else {
+                        $user->is_notify_allow = false;
+                    }
+                }
+                else {
+                    $user->is_notify_allow = false;
+                }
 
 
                 $user->token = $user->createToken('Login')->plainTextToken;
@@ -179,7 +199,7 @@ class AuthController extends Controller
                 $userdevice->device_name = $request->device_name ?? 'No name';
                 $userdevice->device_id = $request->device_id ?? 'No ID';
                 $userdevice->timezone = $request->timezone ?? 'No Time';
-                $userdevice->token = $request->fcm_token ?? 'No tocken';
+                $userdevice->token = $request->fcm_token ?? 'No token';
                 $userdevice->save();
 
                 $interest = UserInterest::where('user_id', $user->uuid)->first();
@@ -198,6 +218,18 @@ class AuthController extends Controller
                     $user->is_subscribe = true;
                 } else {
                     $user->is_subscribe = false;
+                }
+
+                $allowNotify = NotificationAllow::where('user_id', $user->uuid)->first();
+                if ($allowNotify) {
+                    if ($allowNotify->is_allow == 1) {
+                        $user->is_notify_allow = true;
+                    } else {
+                        $user->is_notify_allow = false;
+                    }
+                }
+                else {
+                    $user->is_notify_allow = false;
                 }
 
                 $user->token = $user->createToken('Login')->plainTextToken;
@@ -220,7 +252,7 @@ class AuthController extends Controller
                 $userdevice->device_name = $request->device_name ?? 'No name';
                 $userdevice->device_id = $request->device_id ?? 'No ID';
                 $userdevice->timezone = $request->timezone ?? 'No Time';
-                $userdevice->token = $request->fcm_token ?? 'No tocken';
+                $userdevice->token = $request->fcm_token ?? 'No token';
                 $userdevice->save();
 
                 $interest = UserInterest::where('user_id', $user->uuid)->first();
@@ -241,6 +273,18 @@ class AuthController extends Controller
                     $user->is_subscribe = false;
                 }
 
+                $allowNotify = NotificationAllow::where('user_id', $user->uuid)->first();
+                if ($allowNotify) {
+                    if ($allowNotify->is_allow == 1) {
+                        $user->is_notify_allow = true;
+                    } else {
+                        $user->is_notify_allow = false;
+                    }
+                }
+                else {
+                    $user->is_notify_allow = false;
+                }
+
                 $user->token = $user->createToken('Login')->plainTextToken;
 
                 return response()->json([
@@ -251,11 +295,17 @@ class AuthController extends Controller
             }
             $create = new User();
             $create->first_name = $request->first_name;
+            $create->last_name = $request->last_name ? : '';
             $create->email = $request->email;
             $create->password = '';
             $create->timezone = $request->timezone ?? 'No Time';
             $create->is_password_added = 0;
             $create->save();
+
+            $allowNotify = new  NotificationAllow();
+            $allowNotify->user_id = $create->uuid;
+            $allowNotify->is_allow = 1;
+            $allowNotify->save();
 
             $linked = new LinkedAccount();
             $linked->user_id = $create->uuid;
@@ -269,7 +319,7 @@ class AuthController extends Controller
             $userdevice->device_name = $request->device_name ?? 'No name';
             $userdevice->device_id = $request->device_id ?? 'No ID';
             $userdevice->timezone = $request->timezone ?? 'No Time';
-            $userdevice->token = $request->fcm_token ?? 'No tocken';
+            $userdevice->token = $request->fcm_token ?? 'No token';
             $userdevice->save();
 
             $user = User::find($create->uuid);
@@ -290,6 +340,7 @@ class AuthController extends Controller
             } else {
                 $user->is_subscribe = false;
             }
+            $user->is_notify_allow = true;
 
             $user->token = $user->createToken('Register')->plainTextToken;
 
@@ -320,10 +371,9 @@ class AuthController extends Controller
                     $userdevice->device_name = $request->device_name ?? 'No name';
                     $userdevice->device_id = $request->device_id ?? 'No ID';
                     $userdevice->timezone = $request->timezone ?? 'No Time';
-                    $userdevice->token = $request->fcm_token ?? 'No tocken';
+                    $userdevice->token = $request->fcm_token ?? 'No token';
                     $userdevice->save();
 
-                    $user->token = $user->createToken('Login')->plainTextToken;
                     $interest = UserInterest::where('user_id', $user->uuid)->first();
                     if ($interest) {
                         $catIds = UserInterest::where('user_id', $user->uuid)->pluck('category_id');
@@ -341,6 +391,18 @@ class AuthController extends Controller
                     } else {
                         $user->is_subscribe = false;
                     }
+                    $allowNotify = NotificationAllow::where('user_id', $user->uuid)->first();
+                    if ($allowNotify) {
+                        if ($allowNotify->is_allow == 1) {
+                            $user->is_notify_allow = true;
+                        } else {
+                            $user->is_notify_allow = false;
+                        }
+                    }
+                    else {
+                        $user->is_notify_allow = false;
+                    }
+                    $user->token = $user->createToken('Login')->plainTextToken;
 
                     return response()->json([
                         'status' => true,
@@ -498,6 +560,7 @@ class AuthController extends Controller
         if ($user) {
             // if (Hash::check($request->password, $user->password)) {
             $user->tokens()->delete();
+            Message::where('from',$user->uuid)->orWhere('to',$user->uuid)->delete();
             $user->delete();
             return response()->json([
                 'status' => true,
@@ -572,12 +635,9 @@ class AuthController extends Controller
         if ($user) {
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $path = Storage::disk('local')->put('user/' . $user->uuid . '/profile', $file);
-
-                // $path = Storage::disk('s3')->putFile('user/' . $request->user_id . '/profile', $file);
-                // $path = Storage::disk('s3')->url($path);
-
-                $user->profile_picture = '/uploads/' . $path;
+                $path = Storage::disk('s3')->putFile('user/' . $user->uuid . '/profile', $file);
+                $path = Storage::disk('s3')->url($path);
+                $user->profile_picture =  $path;
             }
             $user->save();
             $token = $request->bearerToken();

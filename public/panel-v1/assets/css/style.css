@@ -192,7 +192,10 @@
 }
 
 .user-profile-header .rounded {
-    border-radius: 2.5rem !important;
+    height: 100px !important;
+    object-fit: cover;
+    object-position: top !important;
+    border-radius: 0.75rem !important;
     /* box-shadow: 0 0 0.375rem 0.25rem rgba(165, 163, 174, 0.15); */
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -562,9 +565,79 @@ textarea::-webkit-scrollbar-thumb {
     border-radius: 10px;
 }
 
+
+
+#removeImage {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15px;
+    height: 15px;
+    color: #000;
+    font-size: 12px;
+}
+
+#removeImage i {
+    margin: 0;
+    margin-top: 1px;
+}
+
+
+#messageImageIcon {
+    width: 46px;
+    height: 43px;
+    display: inline-flex;
+    /* Ensure the label behaves as a flex container */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    /* Ensure cursor style is applied */
+}
+
+.cursor-pointer {
+    font-size: 43px;
+}
+
+#messageImage {
+    width: 46px;
+}
+
+#messageImage img {
+    width: 43px;
+    height: 43px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.chat-message-wrapper img {
+    object-fit: cover;
+    object-position: center;
+}
+.imagetext img{
+    border-bottom-left-radius: 0rem !important;
+    border-bottom-right-radius: 0rem !important;
+}
+.imagetext .chat-message-text{
+    border-top-left-radius: 0rem !important;
+    border-top-right-radius: 0rem !important;
+}
+
 .photos {
     object-fit: cover;
     border-radius: 10px;
     width: 100%;
-    height: 100px;
+    height: 150px;
 }
+
+.docPhotos{
+    object-fit: cover;
+    border-radius: 10px;
+    width: 100%;
+}
+

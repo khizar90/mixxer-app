@@ -87,7 +87,7 @@
 
 
 
-                                                <div class="d-flex flex-column"><a href=""
+                                                <div class="d-flex flex-column"><a href="{{ route('dashboard-profile',$user->uuid) }}"
                                                         class="text-body text-truncate"><span
                                                             class="fw-semibold user-name-text">{{ $user->first_name }}
                                                             {{ $user->last_name }}

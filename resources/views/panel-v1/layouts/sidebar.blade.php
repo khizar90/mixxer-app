@@ -54,14 +54,16 @@
                 <div data-i18n="Contact Us Categories">Analytics</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::url() == route('dashboard-mixxer-list','up-coming') ? 'active' : '' }}">
-            <a href="{{ route('dashboard-mixxer-list','up-coming') }}" class="menu-link">
+        <li
+            class="menu-item {{ Request::url() == route('dashboard-mixxer-list', 'up-coming') ? 'active' : '' }} || {{ Str::contains(Request::url(), 'dashboard/mixxer/up-coming/') ? 'active' : '' }}">
+            <a href="{{ route('dashboard-mixxer-list', 'up-coming') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-circle"></i>
                 <div data-i18n="Contact Us Categories">Upcoming</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::url() == route('dashboard-mixxer-list','complete') ? 'active' : '' }}">
-            <a href="{{ route('dashboard-mixxer-list','complete') }}" class="menu-link">
+        <li
+            class="menu-item {{ Request::url() == route('dashboard-mixxer-list', 'complete') ? 'active' : '' }} || {{ Str::contains(Request::url(), 'dashboard/mixxer/complete/') ? 'active' : '' }}">
+            <a href="{{ route('dashboard-mixxer-list', 'complete') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-circle"></i>
                 <div data-i18n="Contact Us Categories">Complete</div>
             </a>
@@ -77,14 +79,55 @@
         </li>
 
         <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Request</span>
+            <span class="menu-header-text">Request Forum</span>
         </li>
-        <li class="menu-item {{ Request::url() == route('dashboard-feature-request') ? 'active' : '' }} ">
+        <li
+            class="menu-item {{ Request::url() == route('dashboard-feature-request') ? 'active' : '' }} || {{ Str::contains(Request::url(), 'dashboard/feature/detail/') ? 'active' : '' }} ">
             <a href="{{ route('dashboard-feature-request') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-circle"></i>
                 <div> Feature Request </div>
             </a>
         </li>
+        <li
+            class="menu-item {{ Request::url() == route('dashboard-feedback-') ? 'active' : '' }} || {{ Str::contains(Request::url(), 'dashboard/feedback/detail/') ? 'active' : '' }} ">
+            <a href="{{ route('dashboard-feedback-') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-circle"></i>
+                <div> App Feedback </div>
+            </a>
+        </li>
+        <li
+            class="menu-item {{ Request::url() == route('dashboard-feedback-mixxer') ? 'active' : '' }} || {{ Str::contains(Request::url(), 'dashboard/feedback/mixxer/detail') ? 'active' : '' }} ">
+            <a href="{{ route('dashboard-feedback-mixxer') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-circle"></i>
+                <div> Mixxer Feedback </div>
+            </a>
+        </li>
+        <li
+            class="menu-item {{ Request::url() == route('dashboard-feedback-mixxer-check-in') ? 'active' : '' }} ">
+            <a href="{{ route('dashboard-feedback-mixxer-check-in') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-circle"></i>
+                <div> Mixxer Check In Feedback </div>
+            </a>
+        </li>
+        <li class="menu-item {{ Request::url() == route('dashboard-category-', 'degree') ? 'active' : '' }}">
+            <a href="{{ route('dashboard-category-', 'degree') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-circle"></i>
+                <div data-i18n="Contact Us Categories">Degree Titles</div>
+            </a>
+        </li>
+
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Reports</span>
+        </li>
+
+        <li
+            class="menu-item {{ Request::url() == route('dashboard-report-user') ? 'active' : '' }} || {{ Str::contains(Request::url(), 'dashboard/report/user/') ? 'active' : '' }} ">
+            <a href="{{ route('dashboard-report-user') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-circle"></i>
+                <div> Reported Users </div>
+            </a>
+        </li>
+
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Help & Supports</span>
         </li>
@@ -102,6 +145,12 @@
                 <i class="menu-icon tf-icons ti ti-circle"></i>
 
                 <div>Closed Tickets</div>
+            </a>
+        </li>
+        <li class="menu-item {{ Request::url() == route('dashboard-version-','android') ? 'active' : '' }} || {{ Str::contains(Request::url(), '/dashboard/version') ? 'active' : '' }}">
+            <a href="{{ route('dashboard-version-','android') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-circle"></i>
+                <div data-i18n=" App Versions"> App Versions</div>
             </a>
         </li>
 

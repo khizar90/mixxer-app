@@ -42,6 +42,7 @@ Route::prefix('user/auth')->group(function () {
 Route::prefix('user/')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('send/request/{friend_id}', [UserController::class, 'sendRequest']);
+        Route::get('reject/request/{friend_id}', [UserController::class, 'rejectRequest']);
         Route::get('accept/request/{friend_id}', [UserController::class, 'acceptRequest']);
         Route::get('profile/{to_id}', [UserController::class, 'profile']);
         Route::post('send/feature/request', [UserController::class, 'featureRequest']);
@@ -52,6 +53,13 @@ Route::prefix('user/')->group(function () {
         Route::get('counter', [UserController::class, 'unreadCounter']);
         Route::get('notification', [UserController::class, 'notification']);
         Route::get('notification/read', [UserController::class, 'notificationRead']);
+        Route::get('notification/status/change/{status}', [UserController::class, 'changeNotifyStatus']);
+        Route::get('notification/status/check', [UserController::class, 'NotifyStatusCheck']);
+        Route::post('new/feature/request', [UserController::class, 'featureRequestNew']);
+        Route::post('report/user', [UserController::class, 'reportUser']);
+        Route::post('app/feedback', [UserController::class, 'appFeedback']);
+
+
     });
 });
 
@@ -82,6 +90,7 @@ Route::prefix('user/mixxer')->group(function () {
         Route::get('save/{id}', [MixxerController::class, 'save']);
         Route::post('home', [MixxerController::class, 'home']);
         Route::post('apply/filter', [MixxerController::class, 'applyFilter']);
+        Route::post('apply/filter/list/{type}', [MixxerController::class, 'applyFilterList']);
         Route::post('search', [MixxerController::class, 'search']);
         Route::get('detail/{mixxer_id}', [MixxerController::class, 'detail']);
         Route::get('join/request/{mixxer_id}', [MixxerController::class, 'joinRequest']);
@@ -97,7 +106,7 @@ Route::prefix('user/mixxer')->group(function () {
         Route::get('messages/list/{mixxer_id}', [MixxerController::class, 'conversation']);
         Route::get('messages/read/{mixxer_id}', [MixxerController::class, 'messageRead']);
         Route::post('nearby/list', [MixxerController::class, 'nearBy']);
-        Route::get('invite/list/{mixxer_id}', [MixxerController::class, 'inviteUserList']);
+        Route::post('invite/list/{mixxer_id}', [MixxerController::class, 'inviteUserList']);
         Route::post('send/invite', [MixxerController::class, 'sendInvite']);
         Route::post('accept/invite/request/{mixxer_id}', [MixxerController::class, 'acceptInviteRequest']);
         Route::post('search/list/{mixxer_id}', [MixxerController::class, 'searchUser']);
@@ -105,6 +114,11 @@ Route::prefix('user/mixxer')->group(function () {
         Route::get('remove/cover/{id}', [MixxerController::class, 'removeCover']);
 
         Route::post('friendly/check', [MixxerController::class, 'friendlyCheck']);
+        Route::post('feedback', [MixxerController::class, 'feedback']);
+        Route::post('friendly/feedback', [MixxerController::class, 'friendlyCheckFeedback']);
+
+        Route::get('remove/participant/{mixxer_id}/{user_id}', [MixxerController::class, 'removeParticipant']);
+        Route::get('reject/invite/request/{mixxer_id}', [MixxerController::class, 'rejectInviteRequest']);
 
 
     });
@@ -123,4 +137,5 @@ Route::prefix('user/subscription')->group(function () {
 });
 
 Route::get('app/faqs', [SettingController::class, 'faqs']);
+Route::post('app/contact', [SettingController::class, 'contact']);
 Route::get('splash/{user_id?}', [SettingController::class, 'splash']);

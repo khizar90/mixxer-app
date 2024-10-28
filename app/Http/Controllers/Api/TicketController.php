@@ -15,7 +15,8 @@ class TicketController extends Controller
     {
         $user = User::find($request->user()->uuid);
         $validator = Validator::make($request->all(), [
-            'message' => 'required'
+            'message' => 'required',
+            'category' => 'required'
         ]);
 
         $errorMessage = implode(', ', $validator->errors()->all());
@@ -29,6 +30,7 @@ class TicketController extends Controller
             $ticket = new Ticket();
             $ticket->user_id = $user->uuid;
             $ticket->message = $request->message;
+            $ticket->category = $request->category;
             $ticket->time = time();
             $ticket->save();
 
@@ -113,6 +115,7 @@ class TicketController extends Controller
     {
         $ticket = Ticket::find($id);
         if ($ticket) {
+            Message::where('ticket_id', $id)->update(['is_read' => 1]);
             $messages = Message::where('ticket_id', $id)->get();
             $user = User::select('uuid', 'first_name', 'last_name', 'profile_picture', 'email', 'location')->where('uuid', $ticket->user_id)->first();
             foreach ($messages as $message) {
@@ -121,6 +124,7 @@ class TicketController extends Controller
             return response()->json([
                 'status' => true,
                 'action' => "Conversation",
+                'ticket' => $ticket,
                 'data' => $messages,
             ]);
         }

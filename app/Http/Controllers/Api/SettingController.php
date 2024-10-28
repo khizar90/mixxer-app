@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\AppVersions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\ContactRequest;
+use App\Mail\ContactUs;
 use App\Models\Category;
 use App\Models\Faq;
+use App\Models\NotificationAllow;
 use App\Models\User;
 use App\Models\UserInterest;
 use App\Models\UserSubscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use stdClass;
 
 class SettingController extends Controller
@@ -33,7 +38,7 @@ class SettingController extends Controller
     }
     public function listCategories(Request $request, $type)
     {
-        $categories = Category::select('id', 'name', 'image')->where('type', $type)->get();
+        $categories = Category::select('id', 'name', 'image')->where('type', $type)->orderBy('name', 'asc')->get();
         foreach ($categories as $item) {
             $item->is_added = false;
         }
@@ -61,6 +66,7 @@ class SettingController extends Controller
 
         // // $interest = Category::select('id', 'name','image')->where('type', 'interest')->get();
         // $obj->events_category = $events;
+        $appVersions = AppVersions::handle();
 
         if ($user_id != null) {
             $user = User::find($user_id);
@@ -84,6 +90,17 @@ class SettingController extends Controller
                 } else {
                     $obj->user->is_subscribe = false;
                 }
+                $allowNotify = NotificationAllow::where('user_id', $user->uuid)->first();
+                if ($allowNotify) {
+                    if ($allowNotify->is_allow == 1) {
+                        $obj->user->is_notify_allow = true;
+                    } else {
+                        $obj->user->is_notify_allow = false;
+                    }
+                } else {
+                    $obj->user->is_notify_allow = false;
+                }
+
                 $is_delete = false;
             } else {
                 $is_delete = true;
@@ -98,7 +115,16 @@ class SettingController extends Controller
             'status' => true,
             'action' => "Splash",
             'is_delete' => $is_delete,
+            'app_versions' => $appVersions,
             'data' => $obj,
+        ]);
+    }
+
+    public function contact(ContactRequest $request)
+    {
+        Mail::to('contactus@mixxerco.com')->send(new ContactUs($request->name, $request->email, $request->message));
+        return response()->json([
+            'status' => true,
         ]);
     }
 }

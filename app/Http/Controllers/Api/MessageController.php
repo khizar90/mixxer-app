@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\BlockedUser;
+use App\Actions\UserUnreadCount;
 use App\Http\Controllers\Controller;
 use App\Models\FriendRequest;
 use App\Models\Message;
 use App\Models\Mixxer;
 use App\Models\MixxerJoinRequest;
+use App\Models\NotificationAllow;
 use App\Models\User;
 use App\Models\UserDevice;
 use App\Services\FirebaseNotificationService;
@@ -27,12 +30,14 @@ class MessageController extends Controller
 
     public function send(Request $request)
     {
+        $userIDs = NotificationAllow::where('is_allow', 0)->pluck('user_id');
+
         $user = User::find($request->user()->uuid);
         if ($request->ticket_id) {
             $validator = Validator::make($request->all(), [
                 'ticket_id' => "required|exists:tickets,id",
                 'type' => 'required',
-                'message' => 'required'
+                'message' => 'required_without:attachment'
             ]);
         } elseif ($request->mixxer_id) {
             $validator = Validator::make($request->all(), [
@@ -65,8 +70,14 @@ class MessageController extends Controller
             $chat_message->type = $request->type;
             $chat_message->to = 0;
             $chat_message->ticket_id = $request->ticket_id;
-            $chat_message->message = $request->message;
+            $chat_message->message = $request->message ?: '';
             $chat_message->time = time();
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $path = Storage::disk('s3')->putFile('user/' . $user->uuid . '/chat', $file);
+                $path = Storage::disk('s3')->url($path);
+                $chat_message->attachment = $path;
+            }
             $chat_message->save();
             Message::where('ticket_id', $request->ticket_id)->where('is_read', 0)->update(['is_read' => 1]);
 
@@ -76,12 +87,10 @@ class MessageController extends Controller
 
             if ($request->hasFile('attachment')) {
                 $file = $request->file('attachment');
-                $path = Storage::disk('local')->put('user/' . $user->uuid . '/chat', $file);
 
-                // $path = Storage::disk('s3')->putFile('user/' . $request->user->uuid . '/profile', $file);
-                // $path = Storage::disk('s3')->url($path);
-
-                $chat_message->attachment = '/uploads/' . $path;
+                $path = Storage::disk('s3')->putFile('user/' . $user->uuid . '/chat', $file);
+                $path = Storage::disk('s3')->url($path);
+                $chat_message->attachment =  $path;
             }
 
             $chat_message->from = $user->uuid;
@@ -93,24 +102,29 @@ class MessageController extends Controller
 
             $chat_message->save();
             $chat_message = Message::find($chat_message->id);
+            $chat_message->user = User::select('uuid', 'first_name', 'last_name', 'profile_picture', 'email', 'location')->where('uuid',$user->uuid)->first();
             $mixxer = Mixxer::find($request->mixxer_id);
-            $ownerToken = [];
-            if ($user->uuid != $mixxer->user_id) {
-                $ownerToken = UserDevice::where('user_id', $mixxer->user_id)->where('token', '!=', '')->groupBy('token')->pluck('token')->toArray();
-            }
-
-            $mixxerUserIDs = MixxerJoinRequest::where('mixxer_id', $request->mixxer_id)->where('status', 'accept')->pluck('user_id');
-            $tokens = UserDevice::whereIn('user_id', $mixxerUserIDs)->where('user_id', '!=', $user->uuid)->where('token', '!=', '')->groupBy('token')->pluck('token')->toArray();
-            $combinedTokens = array_merge($tokens, $ownerToken);
 
             $data = [
                 'data_id' => $request->mixxer_id,
                 'type' => 'mixxer_chat',
             ];
+            $message = $chat_message->message ?: 'sent a attachment!';
+            $ownerToken = [];
+            if ($user->uuid != $mixxer->user_id) {
+                $ownerToken = UserDevice::where('user_id', $mixxer->user_id)->whereNotIn('user_id', $userIDs)->where('token', '!=', '')->groupBy('token')->pluck('token')->toArray();
+                $owner = User::find($mixxer->user_id);
+                $unreadCounts = UserUnreadCount::handle($owner);
+                $this->firebaseNotification->sendNotification($mixxer->title, $user->first_name . ': ' . $message, $ownerToken, $data, $unreadCounts);
+            }
 
-            $message = $chat_message->message ? : 'sent a attachment!';
-
-            $this->firebaseNotification->sendNotification($mixxer->title,$user->first_name . ': ' . $message, $combinedTokens, $data,1);
+            $mixxerUserIDs = MixxerJoinRequest::where('mixxer_id', $request->mixxer_id)->where('status', 'accept')->pluck('user_id');
+            foreach ($mixxerUserIDs as $id) {
+                $tokens = UserDevice::where('user_id', $id)->whereNotIn('user_id', $userIDs)->where('user_id', '!=', $user->uuid)->where('token', '!=', '')->groupBy('token')->pluck('token')->toArray();
+                $otherUser = User::find($id);
+                $unreadCounts = UserUnreadCount::handle($otherUser);
+                $this->firebaseNotification->sendNotification($mixxer->title, $user->first_name . ': ' . $message, $ownerToken, $data, $unreadCounts);
+            }
 
             $pusher = new Pusher('c41deb84f109a656ec85', 'bbc198c5bddd7c335ffc', '1824988', [
                 'cluster' => 'us3',
@@ -123,12 +137,9 @@ class MessageController extends Controller
 
             if ($request->hasFile('attachment')) {
                 $file = $request->file('attachment');
-                $path = Storage::disk('local')->put('user/' . $user->uuid . '/chat', $file);
-
-                // $path = Storage::disk('s3')->putFile('user/' . $request->user->uuid . '/profile', $file);
-                // $path = Storage::disk('s3')->url($path);
-
-                $chat_message->attachment = '/uploads/' . $path;
+                $path = Storage::disk('s3')->putFile('user/' . $user->uuid . '/chat', $file);
+                $path = Storage::disk('s3')->url($path);
+                $chat_message->attachment = $path;
             }
 
             $chat_message->from = $user->uuid;
@@ -150,14 +161,15 @@ class MessageController extends Controller
             $chat_message = Message::find($chat_message->id);
 
             $find = Message::find($chat_message->id);
-            $tokens = UserDevice::where('user_id', $request->to)->where('token', '!=', '')->groupBy('token')->pluck('token')->toArray();
+            $tokens = UserDevice::where('user_id', $request->to)->whereNotIn('user_id', $userIDs)->where('token', '!=', '')->groupBy('token')->pluck('token')->toArray();
             $data = [
                 'data_id' => $user->uuid,
                 'type' => 'simple_chat',
             ];
-            $message = $chat_message->message ? : 'sent a attachment!';
-
-            $this->firebaseNotification->sendNotification($user->first_name . ' ' . $user->last_name,$message, $tokens, $data,1);
+            $message = $chat_message->message ?: 'sent a attachment!';
+            $otherUser = User::find($request->to);
+            $unreadCounts = UserUnreadCount::handle($otherUser);
+            $this->firebaseNotification->sendNotification($user->first_name . ' ' . $user->last_name, $message, $tokens, $data, $unreadCounts);
 
             $pusher = new Pusher('c41deb84f109a656ec85', 'bbc198c5bddd7c335ffc', '1824988', [
                 'cluster' => 'us3',
@@ -179,6 +191,7 @@ class MessageController extends Controller
     public function conversation(Request $request, $to_id)
     {
         $user = User::find($request->user()->uuid);
+        $blocked = BlockedUser::handle($user->uuid);
 
 
         // Message::where('from', $to_id)->where('to', $user->uuid)->where('is_read', 0)->update(['is_read' => 1]);
@@ -211,12 +224,19 @@ class MessageController extends Controller
         $friendIds = $friendIds->merge($friendIds1);
         $total_friend = count($friendIds);
         $user1->total_friend = $total_friend;
-        $user1->total_mixxers_hosted = Mixxer::where('user_id', $user1->uuid)->count();
-        $user1->total_mixxers_attended =  MixxerJoinRequest::where('user_id', $user1->uuid)->where('status', 'accept')->count();
+        $user1->total_mixxers_hosted = Mixxer::where('user_id', $user1->uuid)->where('status', 2)->count();
+        $total_mixxers_attended =  MixxerJoinRequest::where('user_id', $user1->uuid)->whereNotIn('user_id', $blocked)->where('status', 'accept')->pluck('mixxer_id');
+        $user1->total_mixxers_attended = Mixxer::whereIn('id', $total_mixxers_attended)->where('status', 2)->count();
+        $userOwnMixxer = Mixxer::where('user_id', $user->uuid)->pluck('id');
+        $user1OwnMixxer = Mixxer::where('user_id', $user1->uuid)->pluck('id');
         $userMixxer = MixxerJoinRequest::where('user_id', $user->uuid)->where('status', 'accept')->pluck('mixxer_id');
         $user1Mixxer = MixxerJoinRequest::where('user_id', $user1->uuid)->where('status', 'accept')->pluck('mixxer_id');
+        $user2Mixxer = MixxerJoinRequest::whereIn('mixxer_id', $userOwnMixxer)->where('user_id', $user1->uuid)->where('status', 'accept')->pluck('mixxer_id');
+        $user3Mixxer = MixxerJoinRequest::whereIn('mixxer_id', $user1OwnMixxer)->where('user_id', $user->uuid)->where('status', 'accept')->pluck('mixxer_id');
         $commonMixxers = $userMixxer->intersect($user1Mixxer);
-        $commonMixxerCount = $commonMixxers->count();
+        $commonMixxers = $commonMixxers->merge($user2Mixxer)->unique();
+        $commonMixxers = $commonMixxers->merge($user3Mixxer)->unique();
+        $commonMixxerCount = Mixxer::whereIn('id', $commonMixxers)->whereNotIn('user_id', $blocked)->where('status', 2)->count();
         $user1->total_mixxers_together = $commonMixxerCount;
 
         return response()->json([
@@ -231,7 +251,8 @@ class MessageController extends Controller
     {
 
         $user = User::find($request->user()->uuid);
-        $get = Message::select('from_to')->where('ticket_id', 0)->where('mixxer_id', 0)->where('from', $user->uuid)->orWhere('to', $user->uuid)->where('ticket_id', 0)->where('mixxer_id', 0)->groupBy('from_to')->pluck('from_to');
+        $blocked = BlockedUser::handle($user->uuid);
+        $get = Message::select('from_to')->where('ticket_id', 0)->where('mixxer_id', 0)->where('from', $user->uuid)->whereNotIn('to',$blocked)->orWhere('to', $user->uuid)->whereNotIn('from',$blocked)->where('ticket_id', 0)->where('mixxer_id', 0)->groupBy('from_to')->pluck('from_to');
         $arr = [];
         foreach ($get as $item) {
 
@@ -278,7 +299,7 @@ class MessageController extends Controller
     {
         $user = User::find($request->user()->uuid);
         Message::where('from', $to_id)->where('to', $user->uuid)->where('is_read', 0)->update(['is_read' => 1]);
-        
+
         // Message::where('from_to', $channel)->where('to', $user->uuid)->where('is_read', 0)->update(['is_read' => 1]);
         return response(['status' => true, 'action' => 'Messages read']);
     }

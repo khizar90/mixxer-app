@@ -18,14 +18,14 @@
                             @else
                                 <img class="card-img-top" src="{{ $item->cover }}" alt="" />
                             @endif
-                            <a href="{{ route('dashboard-mixxer-detail', $item->id) }}">
+                            <a href="{{url('dashboard/mixxer/'.$type.'/detail/'.$item->id) }}">
                                 <div class="overlay" id="">
                                 </div>
                             </a>
 
                             <div class="card-body p-3 pb-2">
                                 <h5 class="card-title mb-2"><a
-                                        href="{{ route('dashboard-mixxer-detail', $item->id) }}">{{ $item->title }}</a>
+                                        href="{{ url('dashboard/mixxer/'.$type.'/detail/'.$item->id) }}">{{ $item->title }}</a>
                                 </h5>
                             </div>
 

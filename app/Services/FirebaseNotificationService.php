@@ -2,69 +2,43 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
-use Kreait\Firebase\Messaging;
-use Kreait\Firebase\Messaging\ApnsConfig;
 
 class FirebaseNotificationService
 {
-    protected $messaging;
-
-    public function __construct()
-    {
-        $this->messaging = app('firebase')->createMessaging();
-    }
 
     public function sendNotification($title, $body, array $tokens, array $data = [],$badge)
     {
-        // Create the notification
+        $firebase = (new Factory)->withServiceAccount(__DIR__.'/../../config/firebase_credentials.json');
         $notification = Notification::create($title, $body);
-
-        // Create the message
-        $message = CloudMessage::new()
-            ->withNotification($notification)
+        $messaging = $firebase->createMessaging();
+        $message = CloudMessage::withTarget('topic', 'global')
+            ->withNotification($notification)->withData($data)->withDefaultSounds()
             ->withApnsConfig(
-                ApnsConfig::new()
-                    ->withSound('bingbong.aiff')
-                    ->withBadge($badge)
-            )
-            ->withData($data);
-
+                ApnsConfig::new()->withBadge($badge)
+            );
         // Send the multicast message
         try {
-            // $sendReport = $this->messaging->sendMulticast($message, $tokens);
-            $this->messaging->sendMulticast($message, $tokens);
-
-            // // Check if there were any failures
-            // if ($sendReport->hasFailures()) {
-            //     // Handle failures here
-            //     foreach ($sendReport->failures()->getItems() as $failure) {
-            //         // Log or handle each failure
-            //         echo "Failed to send to {$failure->target()->value()}: {$failure->error()->getMessage()}\n";
-            //     }
-            // }
-
+            $messaging->sendMulticast($message, $tokens);
+            Log::info('Notifications sent successfully', [
+                'title' => $title,
+                'body' => $body,
+                'tokens' => $tokens,
+                'data' => $data,
+                'badge' => $badge,
+                'response' => 'Notification send '
+            ]);
             return "Notifications sent successfully!";
         } catch (\Kreait\Firebase\Exception\MessagingException $e) {
+            Log::info($e->getMessage());
             return "Failed to send notifications: " . $e->getMessage();
         } catch (\Kreait\Firebase\Exception\FirebaseException $e) {
+            Log::info($e->getMessage());
             return "Firebase error: " . $e->getMessage();
         }
     }
-
-    // public function sendNotification($title, $body, $token)
-    // {
-    //     $message = CloudMessage::withTarget('token', $token)
-    //         ->withNotification(Notification::create($title, $body));
-
-    //     try {
-    //         $this->messaging->send($message);
-    //         return "Notification sent successfully!";
-    //     } catch (\Kreait\Firebase\Exception\MessagingException $e) {
-    //         return "Failed to send notification: " . $e->getMessage();
-    //     } catch (\Kreait\Firebase\Exception\FirebaseException $e) {
-    //         return "Firebase error: " . $e->getMessage();
-    //     }
-    // }
 }

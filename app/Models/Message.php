@@ -13,6 +13,10 @@ class Message extends Model
         'created_at'
     ];
     protected $attributes = [
-        'message'=> '',
+        'message' => '',
     ];
+    public function messageReads()
+    {
+        return $this->hasMany(MessageRead::class, 'message_id');
+    }
 }

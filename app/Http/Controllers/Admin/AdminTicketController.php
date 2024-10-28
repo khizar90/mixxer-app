@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\NewNotification;
+use App\Actions\UserUnreadCount;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
+use App\Models\NotificationAllow;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserDevice;
 use App\Services\FirebaseNotificationService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use stdClass;
 
 class AdminTicketController extends Controller
@@ -49,6 +53,20 @@ class AdminTicketController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
+        foreach ($conversation as $message) {
+            $messageTime = Carbon::createFromTimestamp($message->time, 'Asia/Karachi');
+            $formattedTime = '';
+
+            if ($messageTime->isToday()) {
+                $formattedTime = 'Today, ' . $messageTime->format('g:i A');
+            } elseif ($messageTime->isYesterday()) {
+                $formattedTime = 'Yesterday, ' . $messageTime->format('g:i A');
+            } else {
+                $formattedTime = $messageTime->format('d M Y, g:i A');
+            }
+            $message->time = $formattedTime;
+        }
+
         $ticket = Ticket::find($ticket_id);
         $findUser = User::where('uuid', $ticket->user_id)->first();
         return view('panel-v1.ticket.show', compact('conversation', 'findUser', 'ticket'));
@@ -68,26 +86,40 @@ class AdminTicketController extends Controller
 
     public function sendMessage(Request $request)
     {
+        $userIDs = NotificationAllow::where('is_allow',0)->pluck('user_id');
+
         $ticket = Ticket::find($request->ticket_id);
         $message = new Message();
         $message->ticket_id = $request->ticket_id;
         $message->to = $request->user_id;
         $message->from = '';
-        $message->message = $request->message;
+        $message->message = $request->message ?: '';
         $message->type = 'text';
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $path = Storage::disk('s3')->putFile('user/' . $request->user_id . '/chat', $file);
+            $path = Storage::disk('s3')->url($path);
+            $message->attachment = $path;
+            $message->type = 'image';
+        }
         $message->time = time();
         $message->save();
         // NewNotification::handle($user->uuid, $friend_id, 0, 'has accepted your friend request', 'normal', 'accept_request');
-        $tokens = UserDevice::where('user_id', $request->user_id)->where('token', '!=', '')->groupBy('token')->pluck('token')->toArray();
+        $tokens = UserDevice::where('user_id', $request->user_id)->whereNotIn('user_id',$userIDs)->where('token', '!=', '')->groupBy('token')->pluck('token')->toArray();
 
         $data = [
             'data_id' => $request->ticket_id,
             'type' => 'ticket_chat',
         ];
+        $user = User::find($request->user_id);
+        $unreadCounts = UserUnreadCount::handle($user);
+        if ($message->message) {
+            $this->firebaseNotification->sendNotification('Mixxer Support',  'Admin: ' . $message->message, $tokens, $data, $unreadCounts);
+        } else {
+            $this->firebaseNotification->sendNotification('Mixxer Support',  'You have received a new image. Tap to view.', $tokens, $data, $unreadCounts);
+        }
 
-        $message = $message->message ? : 'sent a attachment!';
 
-        $this->firebaseNotification->sendNotification('Mixxer Support',  $message , $tokens, $data, 1);
 
         return response()->json($message);
     }

@@ -120,6 +120,18 @@
                         @endif
                         <h6>{{ $mixxer->participant_count }}</h6>
                     </div>
+                    <div class="d-flex gap-3">
+                        @if (count($feedbacks) > 0)
+                            <a href="{{ url('dashboard/mixxer/' . $type . '/feedbacks/' . $mixxer->id) }}">See
+                                Feedbacks</a>
+                        @endif
+                    </div>
+                    <div class="d-flex gap-3">
+                        @if (count($check_in_feedbacks) > 0)
+                            <a href="{{ url('dashboard/mixxer/' . $type . '/check-in/feedbacks/' . $mixxer->id) }}">See
+                                Check In Feedbacks</a>
+                        @endif
+                    </div>
                     <div class="modal fade" data-bs-backdrop='static' id="addNewBus" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">

@@ -16,6 +16,9 @@ class AdminCategoryController extends Controller
         if ($type == 'interest') {
             return view('panel-v1.category.interest', compact('categories'));
         }
+        if ($type == 'degree') {
+            return view('panel-v1.category.degree', compact('categories'));
+        }
     }
     public function add(Request $request)
     {
@@ -24,15 +27,9 @@ class AdminCategoryController extends Controller
         $category->type = $request->type;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $path = Storage::disk('local')->put('categories', $file);
-            // $path = Storage::disk('s3')->putFile('user/' . $request->user_id . '/profile', $file);
-            // $path = Storage::disk('s3')->url($path);
-            // $extension = $file->getClientOriginalExtension();
-            // $mime = explode('/', $file->getClientMimeType());
-            // $filename = time() . '-' . uniqid() . '.' . $extension;
-            // if ($file->move('uploads/admin/categories/', $filename))
-            //     $path =  '/uploads/admin/categories/' . $filename;
-            $category->image = '/uploads/' . $path;
+            $path = Storage::disk('s3')->putFile('categories', $file);
+            $path = Storage::disk('s3')->url($path);
+            $category->image = $path;
         }
         $category->save();
         return redirect()->back();
@@ -49,11 +46,9 @@ class AdminCategoryController extends Controller
         $category->name = $request->name;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $path = Storage::disk('local')->put('categories', $file);
-            // $path = Storage::disk('s3')->putFile('user/' . $request->user_id . '/profile', $file);
-            // $path = Storage::disk('s3')->url($path);
-
-            $category->image = '/uploads/' . $path;
+            $path = Storage::disk('s3')->putFile('categories', $file);
+            $path = Storage::disk('s3')->url($path);
+            $category->image = $path;
         }
         $category->save();
         return redirect()->back();
